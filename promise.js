@@ -45,6 +45,7 @@
         }
 
         function resolve(newValue) {
+            if (state !== 'pending') return
             // 假如resolve了一个promise的话（链式promise）
             if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
                 var then = newValue.then;
@@ -62,6 +63,7 @@
         }
 
         function reject(reason) {
+            if (state !== 'pending') return
             state = 'rejected'
             value = reason
 
@@ -135,7 +137,9 @@
     window.Promise = Promise
 
 })(window)
+
 /******************************************实例 */
+
 function test(i) {
     return new Promise(function (resolve) {
         setTimeout(() => {
@@ -172,4 +176,17 @@ Promise.race([test(3), test2(5)]).then(function (something) {
     console.log('case3: success!' + something);
 }).catch(function (something) {
     console.log('case3: failed!' + something)
+})
+
+const promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve('success1')
+        reject('error')
+        resolve('success2')
+    },0)
+})
+
+promise
+.then((res) => {
+    console.log('then: ', res)
 })
