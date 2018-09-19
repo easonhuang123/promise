@@ -1,4 +1,4 @@
-
+(function (window) {
     var Promise = function (fn) {
         var value = null;
         var callbacks = [];
@@ -131,7 +131,10 @@
             })
         })
     }
- 
+
+    window.Promise = Promise
+
+})(window)
 /******************************************实例 */
 function test(i) {
     return new Promise(function (resolve) {
